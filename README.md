@@ -1,5 +1,6 @@
 # go-log
-[![Build Status](https://travis-ci.org/jlgrady1/go-log.svg?branch=master)](https://travis-ci.org/jlgrady1/go-log)
+[![Build Status](https://travis-ci.org/jlgrady1/go-log.svg?branch=master)](https://travis-ci.org/jlgrady1/go-log) [![license](http://img.shields.io/badge/license-MIT-red.svg?style=flat)](https://raw.githubusercontent.com/jlgrady1/go-log/master/LICENSE)
+
 Golang Logging Library
 
 This Golang library provides an easy interface for logging to console and files.
