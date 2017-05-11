@@ -58,7 +58,7 @@ func (logger *Logger) ConsoleInfo(message string) {
 	logger.Info(message)
 }
 
-// Trace writes an TRACE level log message to the log file.
+// Trace writes a TRACE level log message to the log file.
 func (logger *Logger) Trace(message string) {
 	if logger.fileLogger == nil || logger.level > TRACE {
 		return
@@ -66,7 +66,7 @@ func (logger *Logger) Trace(message string) {
 	logger.fileLogger.Println(logLine("TRACE", message))
 }
 
-// Debug writes an DEBUG level log message to the log file.
+// Debug writes a DEBUG level log message to the log file.
 func (logger *Logger) Debug(message string) {
 	if logger.fileLogger == nil || logger.level > DEBUG {
 		return
@@ -82,7 +82,7 @@ func (logger *Logger) Info(message string) {
 	logger.fileLogger.Println(logLine("INFO", message))
 }
 
-// Warning writes an WARNING level log message to the log file.
+// Warning writes a WARNING level log message to the log file.
 func (logger *Logger) Warning(message string) {
 	if logger.fileLogger == nil || logger.level > WARNING {
 		return
@@ -98,7 +98,7 @@ func (logger *Logger) Error(message string) {
 	logger.fileLogger.Println(logLine("ERROR", message))
 }
 
-// Fatal writes an FATAL level log message to the log file.
+// Fatal writes a FATAL level log message to the log file.
 func (logger *Logger) Fatal(message string) {
 	if logger.fileLogger == nil || logger.level > FATAL {
 		return
