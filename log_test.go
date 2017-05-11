@@ -75,9 +75,10 @@ func (s *LogSuite) TestTrace(c *C) {
 }
 
 func (s *LogSuite) TestTraceNoPrint(c *C) {
+	var lastString string
 	s.mockLogger.level = DEBUG
 	s.mockLogger.Trace("t1")
-	lastString := s.mockLogWriter.lastString
+	lastString = s.mockLogWriter.lastString
 	c.Assert(lastString, Equals, "")
 	s.mockLogger.level = INFO
 	s.mockLogger.Trace("t2")
@@ -91,12 +92,17 @@ func (s *LogSuite) TestTraceNoPrint(c *C) {
 	s.mockLogger.Trace("t4")
 	lastString = s.mockLogWriter.lastString
 	c.Assert(lastString, Equals, "")
+	s.mockLogger.level = FATAL
+	s.mockLogger.Trace("t5")
+	lastString = s.mockLogWriter.lastString
+	c.Assert(lastString, Equals, "")
 }
 
 func (s *LogSuite) TestDebug(c *C) {
+	var lastString string
 	s.mockLogger.level = DEBUG
 	s.mockLogger.Debug("d1")
-	lastString := s.mockLogWriter.lastString
+	lastString = s.mockLogWriter.lastString
 	c.Assert(lastString, Matches, ".*DEBUG - d1\n")
 	s.mockLogger.level = TRACE
 	s.mockLogger.Debug("d2")
@@ -105,21 +111,119 @@ func (s *LogSuite) TestDebug(c *C) {
 }
 
 func (s *LogSuite) TestDebugNoPrint(c *C) {
+	var lastString string
+	s.mockLogger.level = INFO
+	s.mockLogger.Debug("d1")
+	lastString = s.mockLogWriter.lastString
+	c.Assert(lastString, Equals, "")
+	s.mockLogger.level = WARNING
+	s.mockLogger.Debug("d2")
+	lastString = s.mockLogWriter.lastString
+	c.Assert(lastString, Equals, "")
 	s.mockLogger.level = ERROR
-	s.mockLogger.Debug("test123")
-	lastString := s.mockLogWriter.lastString
+	s.mockLogger.Debug("d3")
+	lastString = s.mockLogWriter.lastString
+	c.Assert(lastString, Equals, "")
+	s.mockLogger.level = FATAL
+	s.mockLogger.Debug("d4")
+	lastString = s.mockLogWriter.lastString
 	c.Assert(lastString, Equals, "")
 }
 
 func (s *LogSuite) TestInfo(c *C) {
-	s.mockLogger.Info("test123")
-	lastString := s.mockLogWriter.lastString
-	c.Assert(lastString, Matches, ".*INFO - test123\n")
+	var lastString string
+	s.mockLogger.level = TRACE
+	s.mockLogger.Info("i1")
+	lastString = s.mockLogWriter.lastString
+	c.Assert(lastString, Matches, ".*INFO - i1\n")
+	s.mockLogger.level = DEBUG
+	s.mockLogger.Info("i2")
+	lastString = s.mockLogWriter.lastString
+	c.Assert(lastString, Matches, ".*INFO - i2\n")
+	s.mockLogger.level = INFO
+	s.mockLogger.Info("i3")
+	lastString = s.mockLogWriter.lastString
+	c.Assert(lastString, Matches, ".*INFO - i3\n")
 }
 
 func (s *LogSuite) TestInfoNoPrint(c *C) {
-	s.mockLogger.level = ERROR
-	s.mockLogger.Info("test123")
-	lastString := s.mockLogWriter.lastString
+	var lastString string
+	s.mockLogger.level = WARNING
+	s.mockLogger.Info("i1")
+	lastString = s.mockLogWriter.lastString
 	c.Assert(lastString, Equals, "")
+	s.mockLogger.level = ERROR
+	s.mockLogger.Info("i2")
+	lastString = s.mockLogWriter.lastString
+	c.Assert(lastString, Equals, "")
+	s.mockLogger.level = FATAL
+	s.mockLogger.Info("i3")
+	lastString = s.mockLogWriter.lastString
+	c.Assert(lastString, Equals, "")
+}
+
+func (s *LogSuite) TestWarning(c *C) {
+	var lastString string
+	s.mockLogger.level = TRACE
+	s.mockLogger.Warning("w1")
+	lastString = s.mockLogWriter.lastString
+	c.Assert(lastString, Matches, ".*WARNING - w1\n")
+	s.mockLogger.level = DEBUG
+	s.mockLogger.Warning("w2")
+	lastString = s.mockLogWriter.lastString
+	c.Assert(lastString, Matches, ".*WARNING - w2\n")
+	s.mockLogger.level = INFO
+	s.mockLogger.Warning("w3")
+	lastString = s.mockLogWriter.lastString
+	c.Assert(lastString, Matches, ".*WARNING - w3\n")
+	s.mockLogger.level = WARNING
+	s.mockLogger.Warning("w4")
+	lastString = s.mockLogWriter.lastString
+	c.Assert(lastString, Matches, ".*WARNING - w4\n")
+}
+
+func (s *LogSuite) TestWarningNoPrint(c *C) {
+	var lastString string
+	s.mockLogger.level = ERROR
+	s.mockLogger.Warning("w1")
+	lastString = s.mockLogWriter.lastString
+	c.Assert(lastString, Equals, "")
+	s.mockLogger.level = FATAL
+	s.mockLogger.Warning("w2")
+	lastString = s.mockLogWriter.lastString
+	c.Assert(lastString, Equals, "")
+}
+
+func (s *LogSuite) TestError(c *C) {
+	var lastString string
+	s.mockLogger.level = TRACE
+	s.mockLogger.Error("e1")
+	lastString = s.mockLogWriter.lastString
+	c.Assert(lastString, Matches, ".*ERROR - e1\n")
+	s.mockLogger.level = DEBUG
+	s.mockLogger.Error("e2")
+	lastString = s.mockLogWriter.lastString
+	c.Assert(lastString, Matches, ".*ERROR - e2\n")
+	s.mockLogger.level = INFO
+	s.mockLogger.Error("e3")
+	lastString = s.mockLogWriter.lastString
+	c.Assert(lastString, Matches, ".*ERROR - e3\n")
+	s.mockLogger.level = WARNING
+	s.mockLogger.Error("e4")
+	lastString = s.mockLogWriter.lastString
+	c.Assert(lastString, Matches, ".*ERROR - e4\n")
+}
+
+func (s *LogSuite) TestErrorNoPrint(c *C) {
+	var lastString string
+	s.mockLogger.level = FATAL
+	s.mockLogger.Error("e1")
+	lastString = s.mockLogWriter.lastString
+	c.Assert(lastString, Equals, "")
+}
+
+func (s *LogSuite) TestClose(c *C) {
+	err := s.mockLogger.Close()
+	c.Assert(err, IsNil)
+	c.Assert(s.mockLogger.file, IsNil)
 }
