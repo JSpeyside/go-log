@@ -29,14 +29,14 @@ const (
 // Log is an interface describing the required functions for a logger.
 type Log interface {
 	Close() error
-	Console(string)
-	ConsoleInfo(string)
-	Trace(string)
-	Debug(string)
-	Info(string)
-	Warning(string)
-	Error(string)
-	Fatal(string)
+	Console(string, ...interface{})
+	ConsoleInfo(string, ...interface{})
+	Trace(string, ...interface{})
+	Debug(string, ...interface{})
+	Info(string, ...interface{})
+	Warning(string, ...interface{})
+	Error(string, ...interface{})
+	Fatal(string, ...interface{})
 }
 
 // Logger is a log handler for various levels of logging.
@@ -48,62 +48,69 @@ type Logger struct {
 }
 
 // Console logs a message directly to the console if quiet is not set.
-func (logger *Logger) Console(message string) {
-	logger.console.Println(message)
+func (logger *Logger) Console(message string, a ...interface{}) {
+	msg := fmt.Sprintf(message, a...)
+	logger.console.Println(msg)
 }
 
 // ConsoleInfo is a helper function that logs to both the console and Info log.
-func (logger *Logger) ConsoleInfo(message string) {
-	logger.Console(message)
-	logger.Info(message)
+func (logger *Logger) ConsoleInfo(message string, a ...interface{}) {
+	logger.Console(message, a...)
+	logger.Info(message, a...)
 }
 
 // Trace writes a TRACE level log message to the log file.
-func (logger *Logger) Trace(message string) {
+func (logger *Logger) Trace(message string, a ...interface{}) {
 	if logger.fileLogger == nil || logger.level > TRACE {
 		return
 	}
-	logger.fileLogger.Println(logLine("TRACE", message))
+	msg := fmt.Sprintf(message, a...)
+	logger.fileLogger.Println(logLine("TRACE", msg))
 }
 
 // Debug writes a DEBUG level log message to the log file.
-func (logger *Logger) Debug(message string) {
+func (logger *Logger) Debug(message string, a ...interface{}) {
 	if logger.fileLogger == nil || logger.level > DEBUG {
 		return
 	}
-	logger.fileLogger.Println(logLine("DEBUG", message))
+	msg := fmt.Sprintf(message, a...)
+	logger.fileLogger.Println(logLine("DEBUG", msg))
 }
 
 // Info writes an INFO level log message to the log file.
-func (logger *Logger) Info(message string) {
+func (logger *Logger) Info(message string, a ...interface{}) {
 	if logger.fileLogger == nil || logger.level > INFO {
 		return
 	}
-	logger.fileLogger.Println(logLine("INFO", message))
+	msg := fmt.Sprintf(message, a...)
+	logger.fileLogger.Println(logLine("INFO", msg))
 }
 
 // Warning writes a WARNING level log message to the log file.
-func (logger *Logger) Warning(message string) {
+func (logger *Logger) Warning(message string, a ...interface{}) {
 	if logger.fileLogger == nil || logger.level > WARNING {
 		return
 	}
-	logger.fileLogger.Println(logLine("WARNING", message))
+	msg := fmt.Sprintf(message, a...)
+	logger.fileLogger.Println(logLine("WARNING", msg))
 }
 
 // Error writes an ERROR level log message to the log file.
-func (logger *Logger) Error(message string) {
+func (logger *Logger) Error(message string, a ...interface{}) {
 	if logger.fileLogger == nil || logger.level > ERROR {
 		return
 	}
-	logger.fileLogger.Println(logLine("ERROR", message))
+	msg := fmt.Sprintf(message, a...)
+	logger.fileLogger.Println(logLine("ERROR", msg))
 }
 
 // Fatal writes a FATAL level log message to the log file.
-func (logger *Logger) Fatal(message string) {
+func (logger *Logger) Fatal(message string, a ...interface{}) {
 	if logger.fileLogger == nil || logger.level > FATAL {
 		return
 	}
-	logger.fileLogger.Println(logLine("FATAL", message))
+	msg := fmt.Sprintf(message, a...)
+	logger.fileLogger.Println(logLine("FATAL", msg))
 	logger.Close()
 	log.Fatalln(message)
 }
@@ -199,3 +206,38 @@ func NewLogger(filename string, level LogLevel) (Log, error) {
 	logger.basicConfig()
 	return logger, nil
 }
+
+// MockLogger is a dummy logger that performs no-ops.
+type MockLogger struct{}
+
+// NewMockLogger returns a new dummy logger.
+func NewMockLogger() Log {
+	return &MockLogger{}
+}
+
+// Close performs no-op.
+func (logger *MockLogger) Close() error { return nil }
+
+// Console performs no-op.
+func (logger *MockLogger) Console(string, ...interface{}) {}
+
+// ConsoleInfo performs no-op.
+func (logger *MockLogger) ConsoleInfo(string, ...interface{}) {}
+
+// Trace performs no-op.
+func (logger *MockLogger) Trace(string, ...interface{}) {}
+
+// Debug performs no-op.
+func (logger *MockLogger) Debug(string, ...interface{}) {}
+
+// Info performs no-op.
+func (logger *MockLogger) Info(string, ...interface{}) {}
+
+// Warning performs no-op.
+func (logger *MockLogger) Warning(string, ...interface{}) {}
+
+// Error performs no-op.
+func (logger *MockLogger) Error(string, ...interface{}) {}
+
+// Fatal performs no-op.
+func (logger *MockLogger) Fatal(string, ...interface{}) {}
