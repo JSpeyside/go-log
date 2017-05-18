@@ -18,7 +18,7 @@ The following log levels are supported when logging.
 Logging to fatal will terminate the program.
 
 ## Usage
-To create a new logger
+To create a new logger specify a log file and a log level. Specifying an empty string `""` for the log file will return a console only logger.
 ```go
 log := NewLogger("/tmp/mylogfile.log", logger.INFO)
 ```
