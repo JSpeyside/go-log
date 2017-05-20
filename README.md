@@ -1,6 +1,6 @@
 # go-log
 [![Build Status](https://travis-ci.org/jlgrady1/go-log.svg?branch=master)](https://travis-ci.org/jlgrady1/go-log) [![Godoc](http://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](https://godoc.org/github.com/jlgrady1/go-log)  [![license](http://img.shields.io/badge/license-MIT-red.svg?style=flat)](https://raw.githubusercontent.com/jlgrady1/go-log/master/LICENSE)
-[![goreportcard](https://goreportcard.com/badge/github.com/jlgrady1/go-log](https://goreportcard.com/badge/github.com/jlgrady1/go-log)
+[![goreportcard](https://goreportcard.com/badge/github.com/jlgrady1/go-log)](https://goreportcard.com/badge/github.com/jlgrady1/go-log)
 
 Golang Logging Library
 
